@@ -4,4 +4,4 @@ while start != 'yes':
 	if start == 'yes':
 		break
 	print("\nPlease play my game\n")
-	
+print("\n\n\n\n\nWelcome to The Lost Island")
