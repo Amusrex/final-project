@@ -1,4 +1,6 @@
 from numpy import array
+from Beginning import Begin
+b = Begin()
 MOVEMENT = {'U':array([0,0,1]),
 	'L':array([0,1,0]),
 	'R':array([0,-1,0]),
@@ -13,6 +15,15 @@ class actions():
 		print(f"{self.allowed_movement}")
 		sdirection = input("Which way do you want to move?\n")
 		direction = sdirection.upper()
+		if direction == 'Q':
+			print('Goodbye')
+			quit()
+		if direction == 'M':
+			print(f'{b.menu1()}')
+			print(f'{self.allowed_movement}')
+			sdirection = input("Which way do you want to move?\n")
+			
+			direction = sdirection.upper()
 		if direction in self.allowed_movement:
 			self.location += MOVEMENT[direction]
 			if direction == "U":
@@ -47,6 +58,7 @@ class actions():
 			
 		if all(self.location == (0,1,0)):
 			self.allowed_movement.append('R')
+
 		if all(self.location == (0,-1,0)):
 			self.allowed_movement.append('L')
 		if all(self.location == (1,0,0)):

@@ -35,3 +35,17 @@ O - use item
 P - pick up item
 I - inventory\n''')
 		print("\nBegin exploring!")
+	def menu1(self):
+		print('''	Game menu
+Q - quit game
+S - save game
+M - menu
+U - up
+D - down
+L - left
+R - right
+F - forward
+B - backward
+O - use item
+P - pick up item
+I - inventory\n''')
