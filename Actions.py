@@ -1,7 +1,9 @@
 from numpy import array
 from Beginning import Begin
+from Rooms import Room1
 b = Begin()
 MOVEMENT = {'U':array([0,0,1]),
+	'N':array([0,0,0]),
 	'L':array([0,1,0]),
 	'R':array([0,-1,0]),
 	'F':array([1,0,0]),
@@ -11,6 +13,8 @@ class actions():
 	def __init__(self):
 		self.location = array([0,0,0])
 		self.allowed_movement = []
+		self.RoomItem = ['map','note']
+		self.player_inventory = []
 	def move_player(self):
 		print(f"{self.allowed_movement}")
 		sdirection = input("Which way do you want to move?\n")
@@ -22,10 +26,17 @@ class actions():
 			print(f'{b.menu1()}')
 			print(f'{self.allowed_movement}')
 			sdirection = input("Which way do you want to move?\n")
+		if direction == 'I':
+			print('Here is your inventory')
+			print(f'{b.menu1()}')
+			direction = 'N'
+	
 			
 			direction = sdirection.upper()
 		if direction in self.allowed_movement:
 			self.location += MOVEMENT[direction]
+			if direction == 'N':
+				print('')
 			if direction == "U":
 				print(f"You moved up")
 				print(f'{self.location}')
@@ -58,6 +69,27 @@ class actions():
 			
 		if all(self.location == (0,1,0)):
 			self.allowed_movement.append('R')
+			if 'map' in self.RoomItem:
+				self.allowed_movement.append('P')
+				move = None
+				while move != 'P'and'R':
+					print(f'{self.allowed_movement}')
+					smove = input('''You found a map.
+What would you like to do?\n''')
+					move = smove.upper()
+				
+					if move == 'P':
+						self.player_inventory.append('map')
+						self.RoomItem.remove('map')
+						self.allowed_movement.remove('P')
+						print('You picked up the map!')
+					elif move == 'R':
+						self.allowed_movement.remove('P')
+						break
+					else:
+						print("Not a valid action")
+					
+
 
 		if all(self.location == (0,-1,0)):
 			self.allowed_movement.append('L')
