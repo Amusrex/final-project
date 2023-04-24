@@ -1,5 +1,6 @@
 from Beginning import Begin
 from Rooms import Room1
+from Actions import actions
 def main():
 	yes = Begin()
 	yes.start_game()
@@ -7,10 +8,13 @@ def main():
 	yes.welcome()
 	print("Here is the game menu.")
 	yes.menu()
-	y = input("Which way do you want to move?")
-	y = y.upper()
-	room = Room1()
-	room.move_player(y)
+	act = actions()
+	
+	done = (1,1,1)
+	while (act.location[0] != done[0]) or (act.location[1] != done[1]) or (act.location[2] != done[2]):
+		act.out()
+		act.move_player()
+	
 
 
 main()
