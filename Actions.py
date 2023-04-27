@@ -13,8 +13,10 @@ class actions():
 	def __init__(self):
 		self.location = array([0,0,0])
 		self.allowed_movement = []
-		self.RoomItem = ['map','note','riddle','protective amulet','flash light','torch']
-		self.animals = ['tree monster']
+		self.RoomItem = ['map','note','riddle','protective amulet','flash light','torch',
+		'grapple hook','machete','wood1','wood2','wood3','key','treasure','rope','nails',
+		'sheets','diary','']
+		self.animals = ['tree monster','bear','lion','giant spider']
 		self.player_inventory = []
 		self.actions = ['Q','S','M','I','O']
 	def move_player(self):
@@ -28,6 +30,8 @@ class actions():
 			quit()
 		elif direction == 'M':
 			print(f'{b.menu1()}')
+			print(f'{self.actions}')
+			print("allowed movements")
 			print(f'{self.allowed_movement}')
 			sdirection = input("Which way do you want to move?\n")
 		elif direction == 'I':
@@ -40,7 +44,8 @@ class actions():
 		elif direction == 'O':
 			ask = input("What item would you like to use\n")
 			if ask == 'map':
-				print('''
+				if 'map' in self.player_inventory:
+					print('''
                          _
              _   _   _  |_|	
            _|_|_|_|_|_| |_|	
@@ -53,19 +58,24 @@ class actions():
     |_|_|_|_|_|_|_|_|_|	
  _ _ _|_|_	
 |_|_|_|_|_|		
-  |_|_ _ _ _
-  |_|_|_|_|_|  _
+  |_|_ _ _ _ _
+  |_|_|_|_|_|_|_
 	|_|_ _|_|
 	|_|_|_|_|
 	 _|_|_
 	|_|_|_|''')
+				else:
+					print("You don't have that item.")
 			elif ask == 'riddle':
-				print('''In a fiery tomb, the treasure lies,
+				if 'riddle' in self.player_inventory:
+					print('''In a fiery tomb, the treasure lies,
 Amidst the ash and smoke that rise.
 The earth may shake, the lava flow,
 But riches beyond measure, it will show.
 Only the bravest, the cleverest too,
 Can find the way to this hidden loot.''')
+				else:
+					print("You don't have that item.")
 			else:
 				print('Cannot use that item')
 
@@ -256,9 +266,13 @@ What would you like to do?\n''')
 						print("Not a valid action")
 		if all(self.location == (4,0,0)):
 			self.allowed_movement.append('L')
+			self.allowed_movement.append('R')
+		if all(self.location == (4,-1,0)):
+			self.allowed_movement.append('L')
 			
 			if 'tree monster' in self.animals:
 				move = input("Oh no!\n A tree monster. (fight/run)\n")
+				
 				if move == 'run':
 					print("You ran all the way back to the beach")
 					
@@ -268,7 +282,27 @@ What would you like to do?\n''')
 				elif move == 'fight':
 					item = input("What item do you want to use\n")
 					if item == 'torch':
+						if 'torch' not in self.player_inventory:
+							print("You don't have this item. You died")
+							option = input("Do you want to play again? (yes/no)\n")
+							if option == 'yes':
+								
+								self.allowed_movement.append('R')
+								self.allowed_movement.append('F')
+								self.RoomItem = ['map','note','riddle','protective amulet','flash light','torch',
+		'grapple hook','machete','wood1','wood2','wood3','key','treasure','rope','nails',
+		'sheets','diary','']
+								self.animals = ['tree monster','bear','lion','giant spider']
+								self.player_inventory = []
+								self.location = array([0,0,0])
+							elif option == 'no':
+								print("Goodbye")
+								quit()
+							else:
+								print("Not a valid input")
+
 						print('You torched the tree monster and killed it. Good job!')
+						self.animals.remove('tree monster')
 					elif item == 'protective amulet':
 						if 'protective amulet' in self.player_inventory:
 							print('You used the protective amulet and lived but you broke the protective amulet.')
@@ -282,8 +316,10 @@ What would you like to do?\n''')
 								
 								self.allowed_movement.append('R')
 								self.allowed_movement.append('F')
-								self.RoomItem = ['map','note','riddle','protective amulet','flash light']
-								self.animals = ['tree monster']
+								self.RoomItem = ['map','note','riddle','protective amulet','flash light','torch',
+		'grapple hook','machete','wood1','wood2','wood3','key','treasure','rope','nails',
+		'sheets','diary','']
+								self.animals = ['tree monster','bear','lion','giant spider']
 								self.player_inventory = []
 								self.location = array([0,0,0])
 							elif option == 'no':
@@ -292,27 +328,100 @@ What would you like to do?\n''')
 							else:
 								print("Not a valid input")
 					else:
-						print("wrong item. You died")
+						print('Not a valid input. You died')
 						option = input("Do you want to play again? (yes/no)\n")
 						if option == 'yes':
-							
 							self.allowed_movement.append('R')
 							self.allowed_movement.append('F')
-							
-							self.RoomItem = ['map','note','riddle','protective amulet','flash light','torch']
-							self.animals = ['tree monster']
+							self.RoomItem = ['map','note','riddle','protective amulet','flash light','torch',
+		'grapple hook','machete','wood1','wood2','wood3','key','treasure','rope','nails',
+		'sheets','diary','']
+							self.animals = ['tree monster','bear','lion','giant spider']
 							self.player_inventory = []
 							self.location = array([0,0,0])
-						
 						elif option == 'no':
 							print("Goodbye")
-							quit()
+							quit()							
 						else:
-							print("Not a valid input")
+								print("Not a valid input")
+
+				elif move not in ('run','fight'):
+					print("wrong input. You died")
+					option = input("Do you want to play again? (yes/no)\n")
+					
+					while option not in ['yes','no']:
+						print("Not a valid action")
+						option = input("Do you want to play again? (yes/no)\n")
+					if option == 'yes':
+						
+						self.allowed_movement.append('R')
+						self.allowed_movement.append('F')
+						
+						self.RoomItem = ['map','note','riddle','protective amulet','flash light','torch',
+		'grapple hook','machete','wood1','wood2','wood3','key','treasure','rope','nails',
+		'sheets','diary','']
+						self.animals = ['tree monster','bear','lion','giant spider']
+						self.player_inventory = []
+						self.location = array([0,0,0])
+						
+					elif option == 'no':
+						print("Goodbye")
+						quit()
+						
+				
 		if all(self.location == (4,1,0)):
 			self.allowed_movement.append('L')
 			self.allowed_movement.append('R')
 			self.allowed_movement.append('B')
+			if 'torch' in self.RoomItem:
+				self.allowed_movement.append('P')
+				move = None
+				while move not in ['P','R','L','B']:
+					print(f'{self.allowed_movement}')
+					smove = input('''You found a torch.
+What would you like to do?\n''')
+					move = smove.upper()
+					if move == 'P':
+						self.player_inventory.append('torch')
+						self.RoomItem.remove('torch')
+						self.allowed_movement.remove('P')
+						print('You picked up the torch!')
+					elif move == 'B':
+						direction = move
+						self.allowed_movement.remove('R')
+						self.allowed_movement.remove('L')
+						self.allowed_movement.remove('P')
+						self.allowed_movement.remove('B')
+						self.allowed_movement.append('F')
+						self.allowed_movement.append('B')
+						self.location += MOVEMENT[direction]
+						print(f'You moved backwards\n{self.location}')
+						break
+					elif move == 'L':
+						direction = move
+						self.allowed_movement.remove('R')
+						self.allowed_movement.remove('L')
+						
+						self.allowed_movement.remove('P')
+						self.allowed_movement.remove('B')
+						self.location += MOVEMENT[direction]
+						print(f'You moved left\n{self.location}')
+						break
+					elif move == 'R':
+						direction = move
+						self.allowed_movement.remove('L')
+						self.allowed_movement.remove('R')
+						self.allowed_movement.remove('P')
+						self.allowed_movement.remove('B')
+						self.allowed_movement.append('L')
+						self.allowed_movement.append('R')
+						self.location += MOVEMENT[direction]
+						print(f'You moved right\n{self.location}')
+						break
+					else:
+						print("Not a valid action")
+			
+				
 		
 		if all(self.location == (4,2,0)):
 			self.allowed_movement.append('L')
@@ -323,6 +432,108 @@ What would you like to do?\n''')
 		if all(self.location == (4,4,0)):
 			self.allowed_movement.append('R')
 			self.allowed_movement.append('F')
+		if all(self.location == (5,4,0)):
+			self.allowed_movement.append('F')
+			self.allowed_movement.append('B')
+		if all(self.location == (6,4,0)):
+			self.allowed_movement.append('L')
+			self.allowed_movement.append('R')
+			self.allowed_movement.append('B')
+			if 'grapple hook' in self.RoomItem:
+				self.allowed_movement.append('P')
+				move = None
+				while move not in ['P','R','L','B']:
+					print(f'{self.allowed_movement}')
+					smove = input('''You found a grapple hook.
+What would you like to do?\n''')
+					move = smove.upper()
+					if move == 'P':
+						self.player_inventory.append('grapple hook')
+						self.RoomItem.remove('grapple hook')
+						self.allowed_movement.remove('P')
+						print('You picked up the grapple hook!')
+						
+						break
+					elif move == 'B':
+						direction = move
+						self.allowed_movement.remove('R')
+						self.allowed_movement.remove('L')
+						self.allowed_movement.remove('P')
+						self.allowed_movement.remove('B')
+						self.allowed_movement.append('F')
+						self.allowed_movement.append('B')
+						self.location += MOVEMENT[direction]
+						print(f'You moved backwards\n{self.location}')
+						break
+					elif move == 'L':
+						direction = move
+						self.allowed_movement.remove('R')
+						self.allowed_movement.remove('L')
+						
+						self.allowed_movement.remove('P')
+						self.allowed_movement.remove('B')
+						self.location += MOVEMENT[direction]
+						print(f'You moved left\n{self.location}')
+						break
+					elif move == 'R':
+						direction = move
+						self.allowed_movement.remove('L')
+						self.allowed_movement.remove('R')
+						self.allowed_movement.remove('P')
+						self.allowed_movement.remove('B')
+						self.allowed_movement.append('L')
+						self.allowed_movement.append('R')
+						self.location += MOVEMENT[direction]
+						print(f'You moved right\n{self.location}')
+						break
+					else:
+						print("Not a valid action")
+			if all(self.location == (6,5,0)):
+				self.allowed_movement.append('L')
+				self.allowed_movement.append('R')
+			if all(self.location == (6,6,0)):
+				self.allowed_movement.append('R')
+				if 'wood1' in self.RoomItem:
+					self.allowed_movement.append('P')
+				move = None
+				while move not in ['P','R','L','B']:
+					print(f'{self.allowed_movement}')
+					smove = input('''You found some wood.
+What would you like to do?\n''')
+					move = smove.upper()
+					if move == 'P':
+						self.player_inventory.append('wood1')
+						self.RoomItem.remove('wood1')
+						self.allowed_movement.remove('P')
+						print('You picked up the wood!')
+					elif move == 'B':
+						direction = move
+						self.allowed_movement.remove('R')
+						self.allowed_movement.remove('L')
+						self.allowed_movement.remove('P')
+						self.allowed_movement.remove('B')
+						self.allowed_movement.append('F')
+						self.allowed_movement.append('B')
+						self.location += MOVEMENT[direction]
+						print(f'You moved backwards\n{self.location}')
+						break
+					
+					elif move == 'R':
+						direction = move
+						self.allowed_movement.remove('L')
+						self.allowed_movement.remove('R')
+						self.allowed_movement.remove('P')
+						self.allowed_movement.remove('B')
+						self.allowed_movement.append('L')
+						self.allowed_movement.append('R')
+						self.location += MOVEMENT[direction]
+						print(f'You moved right\n{self.location}')
+						break
+					else:
+						print("Not a valid action")
+
+				
+
 
 
 			
