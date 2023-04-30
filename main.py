@@ -10,7 +10,7 @@ def main():
 	yes.menu()
 	act = actions()
 	
-	done = (1,1,1)
+	done = (17,-4,0)
 	while (act.location[0] != done[0]) or (act.location[1] != done[1]) or (act.location[2] != done[2]):
 		act.out()
 		act.move_player()
