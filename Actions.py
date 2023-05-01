@@ -132,52 +132,58 @@ Can find the way to this hidden loot.''')
 	def vault(self):
 		if 'treasure' in self.RoomItem:
 			print("You found an ancient vault! there looks to be a key hole on the door.")
+			print("[B],[key]")
 			move = input("What do you want to do?\n")
+
 			while move not in ['key','b','B']:
 				print("Not a valid input")
-			if move == 'key':
-				yes = input('''You opened the vault! You look inside the vault and see old pirate gold.
+			if key in self.player_inventory:
+				if move == 'key':
+					yes = input('''You opened the vault! You look inside the vault and see old pirate gold.
 just as you take a step forward the skeleton of the pirate captian steps in front of you.
 If you answer this riddle correctly you can have all his gold, if not he will kill you with his sword.
 What has a head and a tail but no body?\n''')
-				while yes not in ['coin','Coin']:
-					response = input("Wrong answer. Would you like a hint?")
-					if response == 'yes':
-						print("Money")
-						yes = input("What is the answer to the riddle?")
-					elif response == 'no':
-						yes = input("What is the answer to the riddle?")
-					else:
-						print("Not a valid input")
-				if yes in ['coin','Coin']:
-					self.allowed_movement.append('P')
-					self.allowed_movement.append('B')
-					print('You guessed correctly!')
-					money = input('''You can have all the treasure.
+					while yes not in ['coin','Coin']:
+						response = input("Wrong answer. Would you like a hint?")
+						if response == 'yes':
+							print("Money")
+							yes = input("What is the answer to the riddle?")
+						elif response == 'no':
+							yes = input("What is the answer to the riddle?")
+						else:
+							print("Not a valid input")
+					if yes in ['coin','Coin']:
+						self.allowed_movement.append('P')
+						self.allowed_movement.append('B')
+						print('You guessed correctly!')
+						money = input('''You can have all the treasure.
 If you choose to not pick up the treasure now the pirate will close the vault and you will never be able to grab the treasure again.
 What would you like to do?\n''')
-					if money == 'P':
-						print("You picked up the treasure!")
-						self.allowed_movement.remove('P')
-						self.player_inventory.append('treasure')
-						self.RoomItem.remove('treasure')
-						self.allowed_movement.remove('treasure')
-					elif money == 'B':
-						smove = move.upper()
-						direction = smoveprint
-						self.allowed_movement.append('F')
-						self.allowed_movement.append('B')
-						print(f'You moved backwards\n{self.location}')
-						
-				
-			
-			elif move in ['b',"B"]:
-				smove = move.upper()
-				direction = smoveprint
-				print(f'You moved backwards\n{self.location}')
+						if money == 'P':
+							print("You picked up the treasure!")
+							self.allowed_movement.remove('P')
+							self.player_inventory.append('treasure')
+							self.RoomItem.remove('treasure')
+							self.allowed_movement.remove('treasure')
+						elif money == 'B':
+							smove = move.upper()
+							direction = smoveprint
+							self.allowed_movement.append('F')
+							self.allowed_movement.append('B')
+							self.location += MOVEMENT[direction]
+							print(f'You moved backwards\n{self.location}')
+
 				
 			else:
-				print("not a valid input")
+				print("You don't have the key to the vault")
+				elif move in ['b',"B"]:
+					smove = move.upper()
+					direction = smove
+					self.location += MOVEMENT[direction]
+					print(f'You moved backwards\n{self.location}')
+				
+				else:
+					print("not a valid input")
 		else:
 			self.allowed_movement.append('B')
 
