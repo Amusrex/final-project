@@ -47,14 +47,14 @@ class actions():
 			if ask == 'map':
 				if 'map' in self.player_inventory:
 					print('''
-                         _
-             _   _   _  |_|	
-           _|_|_|_|_|_| |_|	
-          |_|_|_|_|_|_|_|_|_ _ _
-          |_| |_|   |_|_|_|_|_|_|  _        
-                   _ _ _ _ _ _|_|_|_|_
-               _ _|_|_|_|_|_|_|_|_|_|_|
-     _ 	      |_|_|_|       |_|   |_|
+                     _
+         _   _   _  |_|	
+       _|_|_|_|_|_| |_|	
+      |_|_|_|_|_|_|_|_|_ _ _
+      |_| |_|   |_|_|_|_|_|_|  _      
+                   _ _ _ _|_|_|_|_
+               _ _|_|_|_|_|_|_|_|_|
+     _ 	      |_|_|_|   |_|   |_|
     |_|_ _ _ _ _ _|_|_  
     |_|_|_|_|_|_|_|_|_|	
  _ _ _|_|_	
@@ -137,55 +137,73 @@ Can find the way to this hidden loot.''')
 
 			while move not in ['key','b','B']:
 				print("Not a valid input")
-			if key in self.player_inventory:
+				move = input("What do you want to do?\n")
+			if 'key' in self.player_inventory:
 				if move == 'key':
+					self.player_inventory.remove('key')
 					yes = input('''You opened the vault! You look inside the vault and see old pirate gold.
 just as you take a step forward the skeleton of the pirate captian steps in front of you.
 If you answer this riddle correctly you can have all his gold, if not he will kill you with his sword.
 What has a head and a tail but no body?\n''')
 					while yes not in ['coin','Coin']:
-						response = input("Wrong answer. Would you like a hint?")
+						response = input("Wrong answer. Would you like a hint?\n")
 						if response == 'yes':
 							print("Money")
-							yes = input("What is the answer to the riddle?")
+							yes = input("What is the answer to the riddle?\n")
 						elif response == 'no':
-							yes = input("What is the answer to the riddle?")
+							yes = input("What is the answer to the riddle?\n")
 						else:
 							print("Not a valid input")
 					if yes in ['coin','Coin']:
 						self.allowed_movement.append('P')
 						self.allowed_movement.append('B')
 						print('You guessed correctly!')
-						money = input('''You can have all the treasure.
+						smoney = input('''You can have all the treasure.
 If you choose to not pick up the treasure now the pirate will close the vault and you will never be able to grab the treasure again.
 What would you like to do?\n''')
+						money = smoney.upper()
 						if money == 'P':
 							print("You picked up the treasure!")
 							self.allowed_movement.remove('P')
 							self.player_inventory.append('treasure')
 							self.RoomItem.remove('treasure')
-							self.allowed_movement.remove('treasure')
+							
 						elif money == 'B':
 							smove = move.upper()
 							direction = smoveprint
 							self.allowed_movement.append('F')
-							self.allowed_movement.append('B')
+							self.allowed_movement.append('R')
+							self.allowed_movement.remove('B')
 							self.location += MOVEMENT[direction]
 							print(f'You moved backwards\n{self.location}')
-
+						else:
+							print("Wrong answer")
+							print("The vault has been sealed with the treasure inside it forever.")
+							self.location = array([8,0,-2])
 				
-			else:
-				print("You don't have the key to the vault")
+			
 				elif move in ['b',"B"]:
+					self.allowed_movement.append('F')
+					self.allowed_movement.append('R')
+					
 					smove = move.upper()
 					direction = smove
 					self.location += MOVEMENT[direction]
 					print(f'You moved backwards\n{self.location}')
-				
-				else:
-					print("not a valid input")
+			elif move in ['b','B']:
+				self.allowed_movement.append('F')
+				self.allowed_movement.append('R')
+				self.allowed_movement.remove('B')
+				smove = move.upper()
+				direction = smove
+				self.location += MOVEMENT[direction]
+				print(f'You moved backwards\n{self.location}')
+			else:
+				print("You don't have the key to the vault")	
+					
 		else:
 			self.allowed_movement.append('B')
+						
 
 	def out(self):
 	
@@ -832,7 +850,7 @@ What would you like to do?\n''')
 			self.allowed_movement.append('F')
 			self.allowed_movement.append('R')
 		if all(self.location == (9,0,-2)):
-			self.allowed_movement.append('B')
+			
 			actions.vault(self)
 		if all(self.location == (8,-1,-3)):
 			self.allowed_movement.append('U')
@@ -1129,8 +1147,26 @@ What would you like to do?\n''')
 			self.allowed_movement.append('F')
 			self.allowed_movement.append('B')
 		if all(self.location == (16,-4,0)):
-			self.allowed_movement.append('F')
+			
 			self.allowed_movement.append('B')
+			if all(player_inventory == ['wood1','wood2','wood3','rope','nails','sheets']):
+				choice =  input('''You found an old sail boat! What would you like to do?
+repair/explore\n''')
+				while choice not in ['repair','explore']:
+					print("Not a valid input.")
+					choice = input("What would you like to do?\n")
+
+				if choice == 'repair':
+					print("You repaired the sail boat! You sailed away from the island.")
+				if choice == 'explore':
+					direction = 'B'
+					self.location += MOVEMENT[direction]
+					print(f'You moved backwards\n{self.location}')
+			else:
+				print('''You found an old sail boat but don't have all the items to repair it.
+ Keep exploring''')
+
+
 		if all(self.location == (13,-3,0)):
 			self.allowed_movement.append('L')
 			self.allowed_movement.append('R')
