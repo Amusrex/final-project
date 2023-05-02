@@ -22,18 +22,9 @@ class actions():
 		self.player_inventory = []
 		self.actions = ['Q','S','L','R','M','I','O']
 		self.direction = ""
-	def save_game(self, filename):
-		with open(filename, 'wb') as f:
-			pickle.dump(self, f)
-		print("Game saved.")
 
 
-	def load_game(self, filename):
-		with open(filename, 'rb') as f:
-			loaded_actions = pickle.load(f)
-		self.location = loaded_actions.location
-		self.direction = loaded_actions.direction
-		print("Game loaded.")
+	
 	def move_player(self):
 		
 		print(f"{self.actions}")
@@ -73,24 +64,13 @@ class actions():
 				self.location = array([0,0,0])
 			if yes == 'no':
 				pass
-		elif direction == 's' or direction == 'S':
-			save_input = input("Do you want to save the game? (y/n): \n")
-			if save_input.lower() == 'y':
-				filename = input("Enter a filename to save the game: \n")
-				self.save_game(filename)
-			elif save_input.lower() == 'n':
-				pass
-			else:
-				print("Not a valid input")
-		elif direction == 'a' or direction == 'A':
-			load_input = input("Do you want to load a saved game? (y/n): ")
-			if load_input.lower() == 'y':
-				filename = input("Enter the filename of the saved game: ")
-				self.load_game(filename)
-			elif load_input.lower() == 'n':
-				pass
-			else:
-				print("Not a valid input")
+		elif direction == 'S':
+			filename = input("Enter a filename to save the game: \n")
+			self.save_game(filename)
+
+		elif direction == 'A':
+			filename = input("Enter the filename of the saved game: ")
+			self.load_game(filename)
 		elif direction == 'O':
 			ask = input("What item would you like to use\n")
 			if ask == 'map':
@@ -176,6 +156,18 @@ Until next time,''')
 		location = self.location
 		self.direction = direction
 		return direction
+	def save_game(self, filename):
+		with open(filename, 'wb') as f:
+			pickle.dump(self, f)
+		print("Game saved.")
+
+
+	def load_game(self, filename):
+		with open(filename, 'rb') as f:
+			loaded_actions = pickle.load(f)
+		self.location = loaded_actions.location
+		self.direction = loaded_actions.direction
+		print("Game loaded.")
 	def dead(self):
 		print("You fell into the lava. You died")
 		option = input("Do you want to play again? (yes/no)\n")
