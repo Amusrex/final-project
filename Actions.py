@@ -1,3 +1,5 @@
+import json
+import pickle
 from numpy import array
 from Beginning import Begin
 from Rooms import Room1
@@ -18,9 +20,22 @@ class actions():
 		'sheets','diary','']
 		self.animals = ['tree monster','bear','lion','giant spider']
 		self.player_inventory = []
-		self.actions = ['Q','S','M','I','O']
-		
+		self.actions = ['Q','S','L','R','M','I','O']
+		self.direction = ""
+	def save_game(self, filename):
+		with open(filename, 'wb') as f:
+			pickle.dump(self, f)
+		print("Game saved.")
+
+
+	def load_game(self, filename):
+		with open(filename, 'rb') as f:
+			loaded_actions = pickle.load(f)
+		self.location = loaded_actions.location
+		self.direction = loaded_actions.direction
+		print("Game loaded.")
 	def move_player(self):
+		
 		print(f"{self.actions}")
 		print(f"Allowed movements\n{self.allowed_movement}")
 		
@@ -29,6 +44,8 @@ class actions():
 		if direction == 'Q':
 			print('Goodbye')
 			quit()
+		elif direction == 'S':
+			actions.save_game()
 		elif direction == 'M':
 			print(f'{b.menu1()}')
 			print(f'{self.actions}')
@@ -41,7 +58,39 @@ class actions():
 			else:
 				print('Here is your inventory')
 				print(f'{self.player_inventory}')
-			direction = 'N'
+		elif direction == 'Q':
+			syes = input("Do you want to restart? (y/n)\n")
+			yes = syes.lower()
+			if yes == 'y':
+				self.allowed_movement.append('L')
+				self.allowed_movement.append('R')
+				self.allowed_movement.append('F')
+				self.RoomItem = ['map','note','riddle','protective amulet','flash light','torch',
+		'grapple hook','machete','wood1','wood2','wood3','key','treasure','rope','nails',
+		'sheets','diary','']
+				self.animals = ['tree monster','bear','lion','giant spider']
+				self.player_inventory = []
+				self.location = array([0,0,0])
+			if yes == 'no':
+				pass
+		elif direction == 's' or direction == 'S':
+			save_input = input("Do you want to save the game? (y/n): \n")
+			if save_input.lower() == 'y':
+				filename = input("Enter a filename to save the game: \n")
+				self.save_game(filename)
+			elif save_input.lower() == 'n':
+				pass
+			else:
+				print("Not a valid input")
+		elif direction == 'a' or direction == 'A':
+			load_input = input("Do you want to load a saved game? (y/n): ")
+			if load_input.lower() == 'y':
+				filename = input("Enter the filename of the saved game: ")
+				self.load_game(filename)
+			elif load_input.lower() == 'n':
+				pass
+			else:
+				print("Not a valid input")
 		elif direction == 'O':
 			ask = input("What item would you like to use\n")
 			if ask == 'map':
@@ -77,6 +126,22 @@ Only the bravest, the cleverest too,
 Can find the way to this hidden loot.''')
 				else:
 					print("You don't have that item.")
+			elif ask == 'diary':
+				if 'diary' in self.player_inventory:
+					print('''It's been weeks since I arrived on this island, and I still can't believe what I've found.
+ I stumbled upon this old cottage in the woods today, and inside, I found this diary. It's amazing to think that someone else was here before me, living and exploring just like I am now.
+As I read through the entries, I felt a sense of kinship with the author. 
+They, too, were awed by the natural beauty of the island and the mystery that shrouded it. 
+They wrote about the same jungle creatures that I've encountered, and the same sense of excitement that comes with discovering something new.
+But there was something else in these pages too. 
+he author wrote about a darkness that lay beneath the surface of the island, a sense of foreboding that they couldn't quite shake. 
+They wrote about feeling watched, about strange noises in the night, about a growing sense of unease.
+I can't help but wonder what happened to the author of this diary. Did they make it off the island alive, or did they fall victim to some unknown danger? 
+And will I be able to avoid the same fate?
+For now, I'll continue to explore, but I'll do so with a greater sense of caution. 
+I don't want to end up like the author of this diary.
+
+Until next time,''')
 			else:
 				print('Cannot use that item')
 
@@ -109,7 +174,8 @@ Can find the way to this hidden loot.''')
 			print("Invalid direction")
 		self.allowed_movement = []
 		location = self.location
-		return location
+		self.direction = direction
+		return direction
 	def dead(self):
 		print("You fell into the lava. You died")
 		option = input("Do you want to play again? (yes/no)\n")
@@ -1158,6 +1224,8 @@ repair/explore\n''')
 
 				if choice == 'repair':
 					print("You repaired the sail boat! You sailed away from the island.")
+					direction = 'F'
+					self.location += MOVEMENT[direction]
 				if choice == 'explore':
 					direction = 'B'
 					self.location += MOVEMENT[direction]

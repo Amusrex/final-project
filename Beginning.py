@@ -24,6 +24,8 @@ You will need to explore the island to find the necesaryy materials to escape. B
 		print('''	Game menu
 Q - quit game
 S - save game
+A - load game
+Q - restart game
 M - menu
 U - up
 D - down
@@ -39,6 +41,8 @@ I - inventory\n''')
 		print('''	Game menu
 Q - quit game
 S - save game
+A - load game
+Q - restart game
 M - menu
 U - up
 D - down

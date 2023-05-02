@@ -14,6 +14,9 @@ def main():
 	while (act.location[0] != done[0]) or (act.location[1] != done[1]) or (act.location[2] != done[2]):
 		act.out()
 		act.move_player()
+		direction = act.direction
+		
+
 	
 
 
