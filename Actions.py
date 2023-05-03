@@ -20,7 +20,7 @@ class actions():
 		'sheets','diary','']
 		self.animals = ['tree monster','bear','lion','giant spider']
 		self.player_inventory = []
-		self.actions = ['Q','S','L','R','M','I','O']
+		self.actions = ['Q','S','A','Q','M','I','O']
 		self.direction = ""
 
 
@@ -35,8 +35,7 @@ class actions():
 		if direction == 'Q':
 			print('Goodbye')
 			quit()
-		elif direction == 'S':
-			actions.save_game()
+		
 		elif direction == 'M':
 			print(f'{b.menu1()}')
 			print(f'{self.actions}')
@@ -65,12 +64,21 @@ class actions():
 			if yes == 'no':
 				pass
 		elif direction == 'S':
-			filename = input("Enter a filename to save the game: \n")
-			self.save_game(filename)
+			filename = input("What do you want the save name to be?")
+			with open(filename, 'wb') as f:
+				pickle.dump(self, f)
+			print("Game saved.")
 
 		elif direction == 'A':
-			filename = input("Enter the filename of the saved game: ")
-			self.load_game(filename)
+			filename = input("What was the name of your save?")
+			with open(filename, 'rb') as f:
+				loaded_actions = pickle.load(f)
+			self.location = loaded_actions.location
+			self.direction = loaded_actions.direction
+			self.player_inventory = loaded_actions.player_inventory
+			self.animals = loaded_actions.animals
+			self.RoomItem = loaded_actions.RoomItem
+			print("Game loaded.")
 		elif direction == 'O':
 			ask = input("What item would you like to use\n")
 			if ask == 'map':
@@ -156,18 +164,7 @@ Until next time,''')
 		location = self.location
 		self.direction = direction
 		return direction
-	def save_game(self, filename):
-		with open(filename, 'wb') as f:
-			pickle.dump(self, f)
-		print("Game saved.")
-
-
-	def load_game(self, filename):
-		with open(filename, 'rb') as f:
-			loaded_actions = pickle.load(f)
-		self.location = loaded_actions.location
-		self.direction = loaded_actions.direction
-		print("Game loaded.")
+	
 	def dead(self):
 		print("You fell into the lava. You died")
 		option = input("Do you want to play again? (yes/no)\n")
